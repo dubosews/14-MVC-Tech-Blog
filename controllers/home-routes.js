@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { Comment, User, Post } = require('../models');
 // Import the custom middleware
 const withAuth = require('../utils/auth');
+const { format_date } = require('../utils/helpers');
 
 // GET all Posts for homepage
 router.get('/', async (req, res) => {
@@ -46,7 +47,7 @@ router.get('/post/:id', withAuth, async (req, res) => {
           ],
         }
       ],
-    }),;
+    });
 
     const post = dbPostData.get({ plain: true });
     res.render('post', { post, loggedIn: req.session.loggedIn });
@@ -58,7 +59,7 @@ router.get('/post/:id', withAuth, async (req, res) => {
 
 // GET all comments for post
 // Use the custom middleware before allowing the user to access the comments
-router.get('/comment/:post_id', withAuth, async (req, res) => {
+router.get('/post/:post_id', withAuth, async (req, res) => {
   try {
     const dbCommentData = await Comment.findAll(req.params.post_id);
 
@@ -78,6 +79,48 @@ router.get('/login', (req, res) => {
   }
 
   res.render('login');
+});
+
+// router for new post POST from the dashboard
+router.post('/newpost', async (req, res) => {
+  try {
+    const dbNewPostData = await Post.create({
+      post_author: req.session.username,
+      title: req.body.title,
+      body: req.body.body,
+      date_created: format_date,
+    });
+
+    req.session.save(() => {
+      req.session.loggedIn = true;
+
+      res.status(200).json(dbNewPostData);
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+//router post for new comments
+router.post('/post/:post_id', async (req, res) => {
+  try {
+    const dbNewCommentData = await Comment.create({
+      post_author: req.session.username,
+      comment_body: req.body.body,
+      post_id: req.params.post_id,
+      date_created: format_date,
+    });
+
+    req.session.save(() => {
+      req.session.loggedIn = true;
+
+      res.status(200).json(dbNewCommentData);
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;

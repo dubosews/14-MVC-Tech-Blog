@@ -5,9 +5,15 @@
     {{post.body}}
   </section>
   <section class="flex-row justify-center">
-    <h4>Comments:</h4>
+    <h3>Comments:</h4>
     {{#each post.comment as |comment|}}
     {{> comment-details}}
     {{/each}}
+    <h3>Add comment:</h3>
+    <form>
+      <h4>Comment Body:</h4>
+      <input type="text" id="comment-body" />
+      <button type="submit"></button>
+    </form>
   </section>
 </section>
