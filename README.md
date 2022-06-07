@@ -11,7 +11,7 @@
   8. [E-mail](#e-mail)
 
 ## Description
-This application is a tech blog built using the Model View Controller. This application allows users to register an account, create new blog posts, view all blog posts, view individual blog posts with comments and upvotes.  
+This application is a tech blog built using the Model View Controller, Node.js and mySQL. This application allows users to register an account, create new blog posts, view all blog posts, view individual blog posts with comments and upvotes.
 
 ## Installation
 Node.JS is required to be able to install and run this application. To install this application, clone this repository to your computer. Navigate to the application directory in a terminal window. In the application directory, begin the installation by typing ```npm install``` in the command line.
